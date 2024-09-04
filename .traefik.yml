@@ -1,0 +1,8 @@
+displayName: pathauthz
+type: middleware
+import: github.com/vince-riv/pathauthz
+summary: Authorizes writes on a restricted path
+
+testData:
+  Headers:
+    X-Restricted-User: testuser
