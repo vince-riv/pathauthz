@@ -1,0 +1,56 @@
+---
+name: Go fmt and lint
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - '**.go'
+      - '**/**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/go*.yml'
+  pull_request:
+    branches: ["main"]
+    paths:
+      - '**.go'
+      - '**/**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/go*.yml'
+
+jobs:
+  fmt:
+    name: go gmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Format
+        run: go fmt ./...
+  lint:
+    name: golangci-lint
+    # Only lint on PRs; it's not as useful on pushes to main
+    if: github.event_name == 'pull_request'
+    # Disable Go 1.11 modules when running per:
+    # https://github.com/golangci/golangci-lint/issues/395#issuecomment-922153131
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Go for golangci-lint
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+        env:
+          GO111MODULE: "off"
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
+          only-new-issues: true
+        env:
+          GO111MODULE: "off"
