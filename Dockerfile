@@ -11,6 +11,6 @@ RUN go mod vendor
 ## Final image
 FROM alpine:latest
 
-WORKDIR /plugins-local/src/pathauthz
+WORKDIR /plugins-local/src/github.com/vince-riv/pathauthz
 
 COPY --from=build /src .
