@@ -1,3 +1,3 @@
 module github.com/vince-riv/pathauthz
 
-go 1.21
+go 1.23
